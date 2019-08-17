@@ -7,6 +7,20 @@
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>Mars</title>
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+
+<style>
+.container-weather{
+  border: 0.5px solid grey;
+  border-radius: 5px;
+}
+h3{
+  font-weight: bold
+}
+h4{
+  font-weight: bold
+}
+
+</style>
 </head>
 
 <body>
@@ -25,7 +39,43 @@
     </div>
   </div>
   <div class="container-fluid">
+    <div class="row">
+        <div class="row">
+            <div class="col-sm-8">
+              <h3>Featured Mars Image</h3>
+              <img src="{{mars_info.featured_image}}" class="rounded float-left" style="width:800px;height:600px;" alt="Mars">
+            </div>
 
+            <div class="col-sm-3">
+                <div class="container-weather">
+                    <h3>Current weather on Mars</h3>
+                    <p>{{mars_info.mars_weather}}</p>
+                </div>
+                <div class="container-dimensions">
+                    <h3>Mars Facts</h3>
+                    <p>{{mars_info.mars_dimensions|safe}}</p>
+                </div>
+            </div>
+            <div class="col-sm-1"></div>   
+        </div>
+    <div class="container-fluid">
+        <div class="row-hemispheres-titles">
+            <h3>Mars Hemispheres</h3>
+        </div> 
+        <div class="row-hemispheres-image">
+        <div class="row">
+          {% for link in mars_info.mars_hemisphere_url %}
+              <div class="col-sm-6">
+                <figure class="figure">
+                    <h4 class="card-title">{{link.title}}</h4>
+                    <img src={{link.url}} class="figure-img img-fluid rounded" style="width:600px;height:600px;" alt="Hemispheres">
+                </figure>
+              </div>  
+          {% endfor %} 
+        </div>  
+        </div> 
+    </div>  
+  </div>
   </div>
 </body>
 

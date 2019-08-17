@@ -6,8 +6,9 @@ import pandas as pd
 
 def init_browser():
     # @NOTE: Replace the path with your actual path to the chromedriver
-    executable_path = {"executable_path": "/usr/local/bin/chromedriver"}
+    executable_path = {"executable_path": r"C:\Users\thank\Desktop\Development\Bootcamp\Sessions\12-Web-Scraping-and-Document-Databases\homework\web_scraping\chromedriver.exe"}
     return Browser("chrome", **executable_path, headless=False)
+   
 
 def scrape_info():
     browser = init_browser()
@@ -31,15 +32,12 @@ def scrape_info():
     browser.visit(url)
     html = browser.html
     soup = bs(html, 'html.parser')
-    results = soup.find('div', attrs={'class':'carousel_items'})
-    image_link = results.article['style']
-    #remove urls unnecessary letters
-    featured_image_url = image_link.replace('background-image: url(','')
-    featured_image_url = featured_image_url.replace(');','')
-    featured_image_url = featured_image_url[1:-1]
-    featured_image_url = url + featured_image_url
-    
-
+    a = soup.find("footer").find("a")
+    if a.has_attr('data-fancybox-href'):
+        relative_url = a['data-fancybox-href']
+        featured_image_url = "https://www.jpl.nasa.gov" + relative_url
+    featured_image_url   
+ 
     # URL of page to be scraped for Mars weather
     url = "https://twitter.com/marswxreport?lang=en"
     browser.visit(url)
@@ -85,26 +83,32 @@ def scrape_info():
         link_hem.append('https://astrogeology.usgs.gov' + img)
 
     # use browser.visit in loop to go through each hem page to find image links
-    hemisphere_image_urls = []
+    hem_img_url = []
     for link in link_hem:
         browser.visit(link)
         soup = bs(browser.html,"html.parser")
         li = soup.find('li')
         link = li.find('a')
         href = link['href']
-        hemisphere_image_urls.append(href)
+        hem_img_url.append(href)
+
+    hemisphere_image_urls = []
+    for i in range(len(hem_img_url)):
+        hemisphere_image_urls.append({
+            "title": hemispheres[i],
+            "url": hem_img_url[i]
+        }) 
 
     #Store data in dictionary
     mars_data = {
         'news_title': news_title,
         'news_overview': new_p,
-        'featured_image':featured_image_url,
+        'featured_image': featured_image_url,
         'mars_weather': mars_weather,
         'mars_dimensions': mars_table,
-        'mars_hemisphere': hemispheres,
-        'mars_hemisphere url': hemisphere_image_urls
+        'mars_hemisphere_url': hemisphere_image_urls
     }
-
+    print(mars_data)
     #Close the browser after scraping
     browser.quit()
 

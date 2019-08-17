@@ -17,6 +17,7 @@ def home():
 
     # Return template and data
     return render_template("index.html", mars_info=mars_data)
+    
 @app.route("/scrape")
 def scrape():
 
